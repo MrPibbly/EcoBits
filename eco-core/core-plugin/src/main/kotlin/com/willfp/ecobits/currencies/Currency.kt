@@ -133,15 +133,6 @@ class Currency(
         PlaceholderManager.registerPlaceholder(
             PlayerPlaceholder(
                 plugin,
-                "${id}_raw"
-            ) {
-                it.getBalance(this).formatRaw()
-            }
-        )
-
-        PlaceholderManager.registerPlaceholder(
-            PlayerPlaceholder(
-                plugin,
                 "${id}_formatted"
             ) {
                 it.getBalance(this).formatWithExtension()
@@ -212,11 +203,6 @@ fun BigDecimal.formatWithExtension(): String {
 fun BigDecimal.formatWithCommas(): String {
     val stripped = this.stripTrailingZeros()
     val decimalFormat = if (stripped.scale() > 0) DecimalFormat("#,##0.00") else DecimalFormat("#,##0")
-    return decimalFormat.format(stripped)
-}
-
-fun BigDecimal.formatRaw(): String {
-    val decimalFormat = if (stripped.scale() > 0) DecimalFormat("###0.00") else DecimalFormat("###0")
     return decimalFormat.format(stripped)
 }
 
