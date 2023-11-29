@@ -133,6 +133,15 @@ class Currency(
         PlaceholderManager.registerPlaceholder(
             PlayerPlaceholder(
                 plugin,
+                "${id}_raw"
+            ) {
+                it.getBalance(this)
+            }
+        )
+
+        PlaceholderManager.registerPlaceholder(
+            PlayerPlaceholder(
+                plugin,
                 "${id}_formatted"
             ) {
                 it.getBalance(this).formatWithExtension()
