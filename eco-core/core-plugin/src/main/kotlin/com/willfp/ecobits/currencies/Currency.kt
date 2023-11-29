@@ -216,8 +216,8 @@ fun BigDecimal.formatWithCommas(): String {
 }
 
 fun BigDecimal.formatRaw(): String {
-    val stripped = this.stripTrailingZeros()
-    return stripped
+    val decimalFormat = if (stripped.scale() > 0) DecimalFormat("###0.00") else DecimalFormat("###0")
+    return decimalFormat.format(stripped)
 }
 
 fun OfflinePlayer.getBalance(currency: Currency): BigDecimal {
