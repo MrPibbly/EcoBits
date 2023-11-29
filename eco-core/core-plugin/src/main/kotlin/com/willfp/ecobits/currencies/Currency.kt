@@ -129,16 +129,16 @@ class Currency(
                 it.getBalance(this).formatWithCommas()
             }
         )
-
+        
         PlaceholderManager.registerPlaceholder(
             PlayerPlaceholder(
                 plugin,
                 "${id}_raw"
             ) {
-                it.getBalance(this).toString()
+                it.getBalance(this).toInt().toString()
             }
         )
-
+        
         PlaceholderManager.registerPlaceholder(
             PlayerPlaceholder(
                 plugin,
