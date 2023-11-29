@@ -135,7 +135,7 @@ class Currency(
                 plugin,
                 "${id}_raw"
             ) {
-                it.getBalance(this)
+                it.getBalance(this).toNiceString()
             }
         )
 
