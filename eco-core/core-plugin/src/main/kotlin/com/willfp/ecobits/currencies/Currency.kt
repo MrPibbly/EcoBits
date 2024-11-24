@@ -84,33 +84,42 @@ class Currency(
     }
 
     init {
-        PlaceholderManager.registerPlaceholder(
-            DynamicPlaceholder(
-                plugin,
-                Pattern.compile("top_${id}_[0-9]+_[a-z]+_?[a-z]*"),
-            ) { value ->
-                val place = value.split("_").getOrNull(2)
-                    ?.toIntOrNull() ?: return@DynamicPlaceholder ""
+		PlaceholderManager.registerPlaceholder(
+			DynamicPlaceholder(
+				plugin,
+				Pattern.compile("top_${id}_[0-9]+_[a-z]+_?[a-z]*"),
+			) { value ->
+				val place = value.split("_").getOrNull(2)
+					?.toIntOrNull() ?: return@DynamicPlaceholder ""
 
-                val type = value.split("_").getOrNull(3)
-                    ?: return@DynamicPlaceholder ""
+				val type = value.split("_").getOrNull(3)
+					?: return@DynamicPlaceholder ""
 
-                val raw = value.split("_").getOrNull(4)
-                    ?.equals("raw", true) ?: true
+				val raw = value.split("_").getOrNull(4)
+					?.equals("raw", true) ?: false
 
-                val placeObj = getLeaderboardPlace(place)
+				val placeObj = getLeaderboardPlace(place)
 
-                return@DynamicPlaceholder when (type) {
-                    "name" -> placeObj?.player?.savedDisplayName
-                        ?: plugin.langYml.getFormattedString("top.name-empty")
+				return@DynamicPlaceholder when (type) {
+					"name" -> {
+						val displayName = placeObj?.player?.savedDisplayName
+						val rawName = placeObj?.player?.uniqueId?.let { uuid ->
+							Bukkit.getOfflinePlayer(uuid).name
+						}
+						
+						(if (raw) rawName else displayName)
+							?: plugin.langYml.getFormattedString("top.name-empty")
+					}
 
-                    "amount" -> (if (raw) placeObj?.amount.toNiceString() else placeObj?.amount?.formatWithExtension())
-                        ?: plugin.langYml.getFormattedString("top.amount-empty")
+					"amount" -> {
+						(if (raw) placeObj?.amount.toNiceString() else placeObj?.amount?.formatWithExtension())
+							?: plugin.langYml.getFormattedString("top.amount-empty")
+					}
 
-                    else -> ""
-                }
-            }
-        )
+					else -> ""
+				}
+			}
+		)
 
         PlaceholderManager.registerPlaceholder(
             PlayerPlaceholder(
